@@ -18,7 +18,7 @@ const CarList = (props) => {
 
                 props.setPageAmount((data.length/6)>Math.round(data.length/6)?Math.round(data.length/6)+1:Math.round(data.length/6));  
             });
-            
+            //dsad
         //     console.log("IN car LIst")
         //     console.log(props.searchProperties);
     },[props.searchProperties, props.searchProperties1, props.selectedPage])
