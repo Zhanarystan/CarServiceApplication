@@ -36,6 +36,9 @@ public class Users implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "url")
+    private String url;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Roles> roles;
 

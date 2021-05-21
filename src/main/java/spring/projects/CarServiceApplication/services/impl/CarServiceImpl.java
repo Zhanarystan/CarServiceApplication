@@ -68,9 +68,15 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    public List<Cars> getHotOffers() {
+        return carRepository.findAllByViewAmountGreaterThanOrderByPostedDateDesc(5);
+    }
+
+    @Override
     public List<Cars> getCarsByUser(Users user) {
         return carRepository.findAllByPostedByEqualsOrderByPostedDateDesc(user);
     }
+
 
     @Override
     public List<Cars> getFilteredCars(SearchingProperties sp) {

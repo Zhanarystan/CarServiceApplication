@@ -25,7 +25,6 @@ const CarList = (props) => {
 
     return( 
         <div className="mt-5" >
-          <h3>{props.selectedPage}</h3>
                 {cars!==null?cars.map((item) => {
                     return <div class="card mb-3">
                     <div class="row no-gutters">

@@ -157,10 +157,19 @@ public class CarController {
         return new ResponseEntity<>(cars,HttpStatus.OK);
     }
 
+    @GetMapping(value = "/hot_offers")
+    public ResponseEntity<?> getHotOffers(){
+        List<CarsDTO> cars = mapToCarsDTO(carService.getHotOffers());
+        return new ResponseEntity<>(cars, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/car_details/{id}")
     public ResponseEntity<?> getCarDetails(@PathVariable(name = "id") Long id){
         Cars car = carService.getCarById(id);
+
         if(car!=null){
+            car.setViewAmount(car.getViewAmount()+1);
+            carService.saveCar(car);
             CarsDTO carDTO = new CarsDTO();
 
             carDTO.setId(car.getId());
@@ -169,7 +178,7 @@ public class CarController {
             carDTO.setCity(car.getCity().getName());
             Users user = car.getPostedBy();
             UserDTO userDTO = new UserDTO(user.getId(),user.getEmail(),user.getFirstName(),user.getLastName(),
-                                            user.getPhoneNumber(),user.getRoles());
+                                            user.getPhoneNumber(),user.getUrl(), user.getRoles());
             carDTO.setPostedBy(userDTO);
             carDTO.setMainPictureUrl(car.getMainPictureUrl());
             carDTO.setPictures(car.getPictures());

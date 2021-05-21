@@ -18,6 +18,7 @@ public class UserDTO implements Serializable {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private String url;
     private List<Roles> roles;
 
 }

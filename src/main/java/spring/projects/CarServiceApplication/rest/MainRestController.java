@@ -37,7 +37,7 @@ public class MainRestController {
     public ResponseEntity<?> profilePage(){
         Users user = getUser();
         return new ResponseEntity<>(new UserDTO(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(),
-                user.getPhoneNumber(), user.getRoles()), HttpStatus.OK);
+                user.getPhoneNumber(), user.getUrl(), user.getRoles()), HttpStatus.OK);
     }
 
     @PostMapping(value = "/update-profile")

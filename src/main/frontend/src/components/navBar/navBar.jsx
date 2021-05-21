@@ -33,7 +33,7 @@ const NavBar = ({currentUser, removeCookieJWT, setCurrentUser, setChangeInAdminP
                 onClick={(e) => {
                   e.preventDefault();
                   setCurrentUser({id:null, email:null, firstName:null, 
-                    lastName:null, phoneNumber:null, roles:null});
+                    lastName:null, phoneNumber:null, roles:[]});
                   localStorage.removeItem('currentUser');
                   localStorage.removeItem('jwt');
                   
@@ -60,19 +60,14 @@ const NavBar = ({currentUser, removeCookieJWT, setCurrentUser, setChangeInAdminP
             <img onClick={() => {history.push("/")}} src={process.env.PUBLIC_URL + '/img/logo.png'} alt='logo' style={{width:"8%",marginRight:'30px'}}/>
             <ul class="navbar-nav mr-auto" style={{flexGrow:"1"}}>
                 <li class="nav-item">
-                    <Link class="nav-link" to='/' >Cars</Link>
+                    <Link class="nav-link" to='/searching' >Cars</Link>
                 </li>
-                <li class="nav-item">
-                    <Link class="nav-link" href="#">Car Store</Link>
-                </li>
-                <li class="nav-item">
-                    <Link class="nav-link" href="#">Moto</Link>
-                </li>
-
+                {currentUser.roles.length===2?
                 <li class="nav-item dropdown">
                     <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Admin Panel Models
                     </a>
+                    
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <Link class="dropdown-item" to="/admin">Cities</Link>
                     <Link class="dropdown-item" to="/admin/makes">Makes</Link>
@@ -80,7 +75,9 @@ const NavBar = ({currentUser, removeCookieJWT, setCurrentUser, setChangeInAdminP
                     <Link class="dropdown-item" to="/admin/cars">Cars</Link>
                     <Link class="dropdown-item" to="/admin/users">Users</Link>
                     </div>
+                    
                 </li>
+                :null}
             </ul>
             {currentUser.email!==null?<Online/>:<Offline/>}
             </div>

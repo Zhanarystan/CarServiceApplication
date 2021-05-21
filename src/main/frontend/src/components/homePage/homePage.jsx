@@ -52,12 +52,12 @@ import Wall from './wall';
     
 // }));
 
-const HomePage = () => {
+const HomePage = (props) => {
 
     return(
         <>
             <Banner />
-            <Wall/>
+            <Wall service={props.service}/>
         </>
     )
 }

@@ -15,6 +15,7 @@ public interface CarService {
     void deleteCar(Cars car);
     Cars saveCar(Cars car);
 
+    List<Cars> getHotOffers();
     List<Cars> getCarsByUser(Users user);
 
     List<Cars> getFilteredCars(SearchingProperties sp);

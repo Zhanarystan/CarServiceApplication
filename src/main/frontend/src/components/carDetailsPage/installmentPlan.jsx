@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 
-const InstallmentPlan = ({price, initialFee}) => {
+const InstallmentPlan = ({price, initialFee, setInstallmentPlan, installmentPlan}) => {
 
     const plans = [
         {monthAmount: 12},
@@ -27,7 +27,7 @@ const InstallmentPlan = ({price, initialFee}) => {
                     <label>Installment term</label>
                     <div className="d-flex">
                         {plans.map((item) => {
-                            return <button className="btn btn-outline-primary">{item.monthAmount}</button> 
+                            return <button className="btn btn-outline-primary" onClick={(e) => setInstallmentPlan(item.monthAmount)}>{item.monthAmount}</button> 
                         })}
                     </div>
                 </div>

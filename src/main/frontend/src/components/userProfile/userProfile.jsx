@@ -2,11 +2,11 @@ import { Button, Divider, Grid, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles';
 import React, {useState, useEffect} from 'react';
 import UserContext from './../userContext';
-
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
     container:{
-        marginTop:"100px",
+        marginTop:"40px",
     },
     profileAvatar:{
         width:'100%',
@@ -31,14 +31,14 @@ const UserProfile = (props) => {
         <UserContext.Consumer>
             {
                 (value) => {
-                    return <Profile currentUser={value} service={props.service}/>
+                    return <Profile currentUser={value} service={props.service} setChangeInAdminPage={props.setChangeInAdminPage} />
                 }
             }
         </UserContext.Consumer>
     )
 }
 
-const Profile = ({currentUser, service}) => {
+const Profile = (props) => {
     const classes = useStyles();
 
     const [firstName, setFirstName] = useState(null);
@@ -50,12 +50,15 @@ const Profile = ({currentUser, service}) => {
     const [rePassword, setRePassword] = useState("");
     const [userId, setUserId] = useState(null);
 
+    const [selectedFile, setSelectedFile] = useState({});
+    const [selectedFileName, setSelectedFileName] = useState(null);
+
     useEffect(()=> {
-        setFirstName(currentUser.firstName);
-        setLastName(currentUser.lastName);
-        setPhoneNumber(currentUser.phoneNumber);
-        setUserId(currentUser.id);
-    },[currentUser.id,currentUser.firstName,currentUser.lastName,currentUser.phoneNumber]);
+        setFirstName(props.currentUser.firstName);
+        setLastName(props.currentUser.lastName);
+        setPhoneNumber(props.currentUser.phoneNumber);
+        setUserId(props.currentUser.id);
+    },[props.currentUser.id,props.currentUser.firstName,props.currentUser.lastName,props.currentUser.phoneNumber]);
 
     console.log(firstName);
     const onFirstNameChange = event => {
@@ -83,8 +86,8 @@ const Profile = ({currentUser, service}) => {
     }
 
     const updateProfileData = event =>{
-        const inputData = {email:currentUser.email,firstName, lastName, phoneNumber};
-        service.addData(inputData,"update-profile")
+        const inputData = {email:props.currentUser.email,firstName, lastName, phoneNumber};
+        props.service.addData(inputData,"update-profile")
                 .then((data) => {
                     setMessage(data.message);
                     if(data.success===true){
@@ -96,8 +99,8 @@ const Profile = ({currentUser, service}) => {
     }
 
     const updatePassword = event =>{
-        const inputData = {email:currentUser.email, oldPassword, password, rePassword};
-        service.addData(inputData,"update-password")
+        const inputData = {email:props.currentUser.email, oldPassword, password, rePassword};
+        props.service.addData(inputData,"update-password")
                 .then((data) => {
                     setMessage(data.message);
                     if(data.success===true){
@@ -111,23 +114,48 @@ const Profile = ({currentUser, service}) => {
         event.preventDefault();
     }
 
+
     const [message, setMessage] = useState(null);
+    
+    const fileSelectedHandler = (e) => {
+        setSelectedFile(e.target.files[0]);
+    }
+
+    const fileUploadHandler = (e) => {
+        e.preventDefault();
+        const fd = new FormData();
+        console.log(selectedFile.name);
+        fd.append('file', selectedFile);
+        axios.post(`http://localhost:8000/api/file/set_user_picture/${userId}`, fd)
+            .then((response) => {
+                props.setChangeInAdminPage(response);
+            });
+    }
+
     return (
         <Grid container >
             <Grid item xs={0} sm={1}/>
             <Grid item xs={12} sm={10} className={classes.container}>
                 <Grid container spacing={5}>
                     <Grid item xs={4}>
-                        <div className={classes.avatarWrapper}>
-                            <img 
-                                src={process.env.PUBLIC_URL + '/img/profile_avatar.png'} alt="" 
-                                className={classes.profileAvatar}
-                            />
+                        
+                        <div>
+                            <div className="form-group">
+                                <img src={`http://localhost:8000/api/file/viewphoto/${props.currentUser.url}`} alt="pic" style={{width:"60%",height:"200px"}}/>
+                            </div>
+                            <form onSubmit={fileUploadHandler}>
+                                <div className="form-group">
+                                    <input  type="file" onChange={fileSelectedHandler} />
+                                </div>
+                                <div className="form-group">
+                                    <button className="btn btn-success w-50" onClick={fileUploadHandler}>UPLOAD MAIN PICTURE</button>
+                                </div>
+                            </form>
                         </div>
                         
                         <Grid xs={9} style={{marginBottom:"30px"}}>
-                            <Typography variant='h5' align='center'>{currentUser.firstName} {currentUser.lastName}</Typography>
-                            <Typography variant='h6' align='center' color='primary'>{currentUser.email}</Typography>
+                            <Typography variant='h5' align='center'>{props.currentUser.firstName} {props.currentUser.lastName}</Typography>
+                            <Typography variant='h6' align='center' color='primary'>{props.currentUser.email}</Typography>
                         </Grid>
                     </Grid>
                     <Divider orientation="vertical" flexItem />

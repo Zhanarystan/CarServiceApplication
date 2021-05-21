@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import spring.projects.CarServiceApplication.entities.Cars;
 import spring.projects.CarServiceApplication.entities.Pictures;
+import spring.projects.CarServiceApplication.entities.Users;
 import spring.projects.CarServiceApplication.services.CarService;
 import spring.projects.CarServiceApplication.services.PictureService;
 import spring.projects.CarServiceApplication.services.UserService;
@@ -62,6 +63,33 @@ public class FileController {
                 car.setMainPictureUrl(picName);
                 carService.saveCar(car);
                 return new ResponseEntity<>(car, HttpStatus.OK);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return new ResponseEntity<>("Unsuccess", HttpStatus.NO_CONTENT);
+        }
+
+
+        return new ResponseEntity<>("Unsuccess", HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping(value = "/set_user_picture/{userId}")
+    public ResponseEntity<?> setUserPicture(@PathVariable(name = "userId") Long userId,
+                                        @RequestParam("file") MultipartFile file){
+
+        if(file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png")){
+            String picName = DigestUtils.sha1Hex("picture_"+file.getOriginalFilename()+"_!Picture");
+
+            try {
+                byte[] bytes = file.getBytes();
+                Path path = Paths.get(uploadPath+picName+".jpg");
+                Files.write(path, bytes);
+                Users user = userService.findById(userId);
+
+                user.setUrl(picName);
+
+                userService.createUser(user);
+                return new ResponseEntity<>(user, HttpStatus.OK);
             }catch (Exception e){
                 e.printStackTrace();
             }

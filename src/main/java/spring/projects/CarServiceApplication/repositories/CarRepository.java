@@ -27,5 +27,6 @@ public interface CarRepository extends JpaRepository<Cars, Long> {
 
     List<Cars> findAllByPostedByEqualsOrderByPostedDateDesc(Users user);
 
+    List<Cars> findAllByViewAmountGreaterThanOrderByPostedDateDesc(int viewAmount);
     Cars findCarsById(Long id);
 }

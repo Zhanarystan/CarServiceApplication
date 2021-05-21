@@ -1,7 +1,8 @@
 import React,{useState} from 'react';
+import {Link, useHistory} from 'react-router-dom';
 
 const Banner = () => {
-
+    let history = useHistory();
     return (
         <div className="container" style={{height:"500px",
         width:"100%",
@@ -14,7 +15,8 @@ const Banner = () => {
                         of selling and buying cars
                 </h5>
                 <button className="btn btn-lg btn-primary" style={{marginTop:'30px',
-                        marginBottom:'20px',}}>
+                        marginBottom:'20px',}}
+                        onClick={()=> history.push('/searching')}>
                     GET STARTED
                 </button>
                 <img 

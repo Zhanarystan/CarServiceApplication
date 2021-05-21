@@ -12,7 +12,7 @@ const CarDetailsPage = (props) => {
     const [car, setCar] = useState({});
     const [user, setUser] = useState({});
     const [pictures, setPictures] = useState([]);
-
+    const [installmentPlan, setInstallmentPlan] = useState(null);
     useEffect(() => {
         props.service.getCarDetails(Id)
             .then((data) => {
@@ -20,7 +20,7 @@ const CarDetailsPage = (props) => {
                 setUser(data.postedBy);
                 setPictures(data.pictures);            
             });
-    },[])
+    },[installmentPlan])
 
     return(
         <div className="container mt-5">
@@ -28,13 +28,15 @@ const CarDetailsPage = (props) => {
             <hr/>
             <div className="row">
                 <div className="col-4">
-                    <CarDetails user={user} car={car}/>
+                    <CarDetails user={user} car={car} installmentPlan={installmentPlan}/>
                 </div>
                 <div className="col-8">
                     <CarPictures mainPictureUrl={car.mainPictureUrl} pictures={pictures}/>
-                    <CarDescription description={car.description}/>
+                    <CarDescription description={car.description} />
                     {car.initialFee!==0?
-                    <InstallmentPlan price={car.price} initialFee={car.initialFee}/>
+                    <InstallmentPlan price={car.price} initialFee={car.initialFee} 
+                                    installmentPlan={installmentPlan}
+                                    setInstallmentPlan={setInstallmentPlan} />
                     :null}
                 </div>
             </div>

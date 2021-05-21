@@ -100,6 +100,11 @@ export default class CarApplicationService {
         return res;
     }
 
+    getHotOffers = async () => {
+        const res = await this.getResource('/car/hot_offers');
+        return res;
+    }
+
 
     registerUser = async(data) => {
         const response = await fetch("http://localhost:8000/signup",{

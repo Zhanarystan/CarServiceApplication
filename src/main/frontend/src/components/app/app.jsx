@@ -31,9 +31,8 @@ import MyAdsPage from '../myAdsPage/myAdsPage';
 
 const App = () => {
 
-
     const [currentUser, setCurrentUser] = useState({id:null, email:null, firstName:null, 
-        lastName:null, phoneNumber:null, roles:null});
+        lastName:null, phoneNumber:null, roles:[]});
 
         
     const service = new CarApplicationService(localStorage.getItem('jwt'));
@@ -45,6 +44,9 @@ const App = () => {
             .then((data)=>{
               setCurrentUser(data);
               localStorage.setItem('currentUser',JSON.stringify(data));
+            }).catch((data) => {
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('currentUser');
             });
         }
     },[changeInAdminPage]);
@@ -113,7 +115,7 @@ const WrapComponents = ({service,setCurrentUser,setCookieJWT,removeCookieJWT, ch
                     <Register service={service}/>
                 </Route>
                 <Route path='/profile' exact>
-                    <UserProfile service={service}/>
+                    <UserProfile service={service} setChangeInAdminPage={setChangeInAdminPage}/>
                 </Route>
                 <Route path='/myads' exact>
                     <MyAdsPage service={service} changeInAdminPage={changeInAdminPage} />
@@ -131,7 +133,7 @@ const WrapComponents = ({service,setCurrentUser,setCookieJWT,removeCookieJWT, ch
                     <CarDetailsPage service={service}/>
                 </Route>
                 <Route path='/'>
-                    <HomePage />
+                    <HomePage service={service} />
                 </Route>
             </Switch>
         </>

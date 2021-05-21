@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-const CarDetails = ({car, user}) => {
+const CarDetails = ({car, user, installmentPlan}) => {
 
+    const [calculation, setCalculation] = useState(null);
+    useEffect(() => {
+        console.log("DSDD");
+        console.log(installmentPlan);
+        let months = installmentPlan===null?+12:installmentPlan;
+        
+        setCalculation(Math.floor((car.price - car.initialFee)/months));
+    },[installmentPlan])
     return(
         <>
         <h5>{car.price} KZT</h5>
@@ -9,15 +17,13 @@ const CarDetails = ({car, user}) => {
         <div>
             <div className="d-flex">
                 <p style={{flexGrow:1}}>Payment for year</p>
-                <p style={{backgroundColor:"yellow"}}>{Math.floor((car.price - car.initialFee)/12)}KZT</p>
+                <p style={{backgroundColor:"yellow"}}>{installmentPlan===null?"Choose plan":calculation+"KZT"}</p>
             </div>
             <div className="d-flex">
                 <p style={{flexGrow:1}}>Initial fee</p>
                 <p>{car.initialFee}</p>
             </div>
-            <div className="form-group">
-                <div className="btn btn-lg btn-primary">CALCULATE FOR CREDIT</div>
-            </div>
+            
             </div>:null}
             <div className="d-flex">
                 <p style={{flexGrow:1}}>City</p>
